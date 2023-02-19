@@ -7,11 +7,15 @@ import {
   FlexBoxRow,
   Button,
   Ellipsis,
+  Input,
 } from "./styled/styled";
+import { useState } from "react";
 
 export function Jetton() {
   const { connected } = useTonConnect();
-  const { mint, jettonWalletAddress, balance } = useFaucetJettonContract();
+  const { burn, mint, jettonWalletAddress, balance } =
+    useFaucetJettonContract();
+  const [amount, setAmount] = useState("0");
 
   return (
     <Card title="Jetton">
@@ -32,6 +36,23 @@ export function Jetton() {
           }}
         >
           Get jettons from faucet
+        </Button>
+        <FlexBoxRow>
+          <label>Burn amount </label>
+          <Input
+            style={{ marginRight: 8 }}
+            value={amount}
+            type="number"
+            onChange={(e) => setAmount(e.target.value)}
+          ></Input>
+        </FlexBoxRow>
+        <Button
+          disabled={!connected}
+          onClick={async () => {
+            burn(toNano(amount));
+          }}
+        >
+          🔥
         </Button>
       </FlexBoxCol>
     </Card>
